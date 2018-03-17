@@ -1,0 +1,23 @@
+﻿{
+  "ROCKETS": [
+    {
+      "name" : "Golden Light",
+      "materials":[
+        "Golden_Body",
+        "Golden_Addons"
+      ],
+      "price": 13000,
+      "unlocked" : false
+    },
+    {
+      "name" : "Green Buzzer",
+      "materials":[
+        "GreenBuzzer_Body",
+        "GreenBuzzer_Addons"
+      ],
+      "price": 42000,
+      "unlocked" : true
+    }
+  ]
+  
+}
