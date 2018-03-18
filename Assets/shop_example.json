@@ -1,0 +1,116 @@
+{
+  "name": "BluRocket Shop",
+  "currentlySelectedItem": "Green Buzzer",
+  "ROCKETS" : [
+    {
+      "_id" : 1,
+      "name": "Green Buzzer",
+      "price": 42000,
+      "materials": [
+        "greenBuzzer_body",
+        "greenBuzzer_addons"
+      ],
+      "unlocked" : true,
+      "specialPower": "addCoins"
+    },
+    {
+      "_id" : 2,
+      "name": "Golden Lighter",
+      "price": 23000,
+      "materials": [
+        "goldenLighter_body",
+        "goldenLighter_addons"
+      ],
+      "unlocked" : false,
+      "specialPower": "addCoins"
+    },
+    {
+      "_id" : 3,
+      "name": "Wall Rider",
+      "price": 12000,
+      "materials": [
+        "wallRider_body",
+        "wallRider_addons"
+      ],
+      "unlocked" : false,
+      "specialPower": "addCoins"
+    },
+    {
+      "_id" : 4,
+      "name": "Friendly Carrier",
+      "price": 24000,
+      "materials": [
+        "friendlyCarrier_body",
+        "friendlyCarrier_addons"
+      ],
+      "unlocked" : false,
+      "specialPower": "addCoins"
+    },
+    {
+      "_id" : 5,
+      "name": "Provider",
+      "price": 24000,
+      "materials": [
+        "provider_body",
+        "provider_addons"
+      ],
+      "unlocked" : false,
+      "specialPower": "addCoins"
+    },
+    {
+      "_id" : 6,
+      "name": "Kush Toker",
+      "price": 24000,
+      "materials": [
+        "kushToker_body",
+        "kushToker_addons"
+      ],
+      "unlocked" : false,
+      "specialPower": "addCoins"
+    },
+    {
+      "_id" : 7,
+      "name": "Proto Bumper",
+      "price": 24000,
+      "materials": [
+        "protoBumper_body",
+        "protoBumper_addons"
+      ],
+      "unlocked" : false,
+      "specialPower": "addCoins"
+    },
+    {
+      "_id" : 8,
+      "name": "Boom Barr",
+      "price": 24000,
+      "materials": [
+        "boomBarr_body",
+        "boomBarr_addons"
+      ],
+      "unlocked" : false,
+      "specialPower": "addCoins"
+    },
+    {
+      "_id" : 9,
+      "name": "Pinky Gurl",
+      "price": 24000,
+      "materials": [
+        "pinkyGurl_body",
+        "pinkyGurl_addons"
+      ],
+      "unlocked" : false,
+      "specialPower": "addCoins"
+    },
+    {
+      "_id" : 10,
+      "name": "Salty Carnos",
+      "price": 24000,
+      "materials": [
+        "saltyCarnos_body",
+        "saltyCarnos_addons"
+      ],
+      "unlocked" : false,
+      "specialPower": "addCoins"
+    }
+  ]
+}

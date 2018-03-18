@@ -1,0 +1,18 @@
+{
+  "_id": "soaihd2302hi2joijd",
+  "name": "fb_name",
+  "highScore": 420,
+  "currentRocket": "Green Buzzer",
+  "coins": 23342,
+  "rank": 23,
+  "STATS":{
+    "challengesWon": 12,
+    "challengesLost": 5,
+    "rocketsUnlocked": 4,
+    "teleportsUsed": 429,
+    "coinsCollected": 68499,
+    "coinsSpent": 40300,
+    "mostCoinsSingleGame": 26,
+    "rowsWithoutTeleport": 43
+  }
+}
