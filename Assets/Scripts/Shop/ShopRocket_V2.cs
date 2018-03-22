@@ -1,48 +1,56 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
 
-public class ShopROcket : MonoBehaviour
-{
+public class ShopRocket_V2 : MonoBehaviour {
+	
+	
+	
+	private GameObject raketaFinal,rocket,body,addons;
+	private Renderer _meshBody,_meshAddons;
 
-
-	private Vector3 _endPosition,_currentPosition;
+	
 	public bool move;
 	public bool scale;
+	
 	public float scrollSpeed = 8f;
 	public float scaleSpeed = 8f;
-
-	public GameObject raketaFinal,rocket,body;
-
-	private Renderer _mesh;
+	
 	private Vector3 _currentScale;
 	private Vector3 _sideRocketScale = new Vector3(80f, 80f, 80f);
 	private Vector3 _middleRocketScale = new Vector3(120f, 120f, 120f);
-
-
-	void Awake()
+	
+	
+	private Vector3 _endPosition,_currentPosition;
+	private void Awake()
 	{
-		
 		raketaFinal = transform.Find("RaketaFinal").gameObject;
 		rocket = raketaFinal.transform.Find("Rocket").gameObject;
 		body = rocket.transform.Find("Body").gameObject;
-		_mesh = body.GetComponent<Renderer>();
-		if(gameObject.name =="Left" || gameObject.name =="Right")
-			transform.localScale = _sideRocketScale;
-		if(gameObject.name =="Middle")
-			transform.localScale = _middleRocketScale;
+		addons = rocket.transform.Find("Addons").gameObject;
+		_meshBody = body.GetComponent<Renderer>();
+		_meshAddons = addons.GetComponent<Renderer>();
 	}
 
 
-	public void setRocketBodyMaterial(Material materials)
+	public void setLockedMaterial(List<Material> materials)
 	{
-		
-		//print("Set :" + gameObject.name + " body material to : " + material);
-		//_mesh.material = material;
-
+		foreach (Material mat in _meshBody.materials)
+		{
+			mat.color = materials[0].color;
+		}
+		_meshAddons.material.color = materials[0].color;
 	}
 
+	public void setMaterial(List<Material> materials)
+	{
+		_meshBody.materials[0].color = materials[0].color;
+		_meshBody.materials[1].color = materials[1].color;
+		_meshAddons.material.color = materials[1].color;
+	}
+	
+	/////////////// MOVEMEVT ///////////////
+	
 	public void MoveLeft(string rocketName, Vector3 endPosition)
 	{
 		
@@ -59,8 +67,8 @@ public class ShopROcket : MonoBehaviour
 		move = true;
 		scale = true;
 	}
-
-
+	
+	
 	void switchNamesLeft(string name)
 	{
 		switch (name)
@@ -106,7 +114,6 @@ public class ShopROcket : MonoBehaviour
 
 	void Update()
 	{
-		
 		if (move)
 		{
 			if (transform.position == _endPosition)
@@ -118,26 +125,25 @@ public class ShopROcket : MonoBehaviour
 			else
 			{
 
-				if(gameObject.name =="Left" || gameObject.name =="Right")
-				transform.localScale = Vector3.Lerp(transform.localScale,_sideRocketScale,Time.deltaTime*scaleSpeed);
-				
-				if(gameObject.name =="Middle")
-					transform.localScale = Vector3.Lerp(transform.localScale,_middleRocketScale,Time.deltaTime*scaleSpeed);
+				if (gameObject.name == "Left" || gameObject.name == "Right")
+					transform.localScale = Vector3.Lerp(transform.localScale, _sideRocketScale, Time.deltaTime * scaleSpeed);
+
+				if (gameObject.name == "Middle")
+					transform.localScale = Vector3.Lerp(transform.localScale, _middleRocketScale, Time.deltaTime * scaleSpeed);
 
 				_currentPosition = transform.position;
-				transform.position = Vector3.Lerp(_currentPosition, _endPosition, Time.deltaTime*scrollSpeed);
+				transform.position = Vector3.Lerp(_currentPosition, _endPosition, Time.deltaTime * scrollSpeed);
 
 			}
 
 		}
-
 	}
-
+	
 	void changeScale(bool enlarge)
 	{
 		if (!enlarge)
 		{
-			 print("Scale down the rocket: " + gameObject.name);
+			print("Scale down the rocket: " + gameObject.name);
 			transform.localScale = Vector3.Lerp(_currentScale,_sideRocketScale,Time.deltaTime);
 		}
 		else

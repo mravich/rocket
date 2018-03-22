@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Facebook.MiniJSON;
 using UnityEditor;
 using UnityEngine;
 
@@ -70,8 +71,15 @@ public class Shop : MonoBehaviour {
 
 	
 	// Use this for initialization
-	void Start () {
-	
+	void Start ()
+	{
+
+		String test = JsonUtility.ToJson(DataManager.Instance.profileInfo);
+		print(test);
+		
+		 profileInfo myObject = JsonUtility.FromJson<profileInfo>(test);
+		print(myObject.name);
+		
 	}
 	
 	// Update is called once per frame
