@@ -49,6 +49,7 @@ public class Shop_V2 : MonoBehaviour
 	public bool canScroll = true;
 	public float scrollTime;
 	private int scrollCounter;
+	public int middleRocket;
 
 	private void Awake()
 	{
@@ -93,10 +94,13 @@ public class Shop_V2 : MonoBehaviour
 		// Set values of text components
 		profileName.text = profile.name;
 		profileCoins.text = profile.coins.ToString();
+		
+		// Sort shop
 		sortShopRockets(currentRocketId);
-		setShopRocketMaterials();
-
-		scrollCounter = currentRocketId;
+		middleRocket = currentRocketId;
+		setInitialShopRocketMaterials();
+		
+		// Scroll
 	}
 
 
@@ -114,19 +118,16 @@ public class Shop_V2 : MonoBehaviour
 			{
 				ScrollShopItems(0);
 				canScroll = false;
-				scrollCounter--;
-				
-				
-				
+				middleRocket--;
+				print(middleRocket);
 
 			}
 			else if (Input.GetKeyDown(KeyCode.RightArrow))
 			{
 				ScrollShopItems(1);
 				canScroll = false;
-				scrollCounter++;
-				
-				
+				middleRocket++;
+				print(middleRocket);
 
 			}
 
@@ -212,7 +213,6 @@ public class Shop_V2 : MonoBehaviour
 				rocketId = rockets.rockets[i]._id;
 			}
 		}
-
 		return rocketId;
 	}
 
@@ -276,7 +276,7 @@ public class Shop_V2 : MonoBehaviour
 	void loadRequiredMaterials()
 	{
 		loadedRequiredMaterials = new Dictionary<int, List<Material>>();
-		for (int i = 1; i <= _requiredMaterials.Count; i++)
+		for (int i = 0; i < _requiredMaterials.Count; i++)
 		{
 			/*print(i + ". Material is : " + _requiredMaterials[i]);
 			print("Materials for this rocket is : " + _requiredMaterials[i][0]);
@@ -293,45 +293,42 @@ public class Shop_V2 : MonoBehaviour
 
 	}
 
-	// TODO replace currentRocketId with another variable which is by default currentRocketId at start then we just increment/decrement it based on scroll direction
-	void setShopRocketMaterials()
+	// TODO replace currentRocketId with another variable which is by default currentRocketId at start then we just increment/decrement it based on scroll directiona
+	void setInitialShopRocketMaterials()
 	{
-
-		// Set middle rocket material
-		transform.Find("Middle").GetComponent<ShopRocket_V2>().setMaterial(loadedRequiredMaterials[currentRocketId]);
-
-		// Check if current rocket is first rocket in database
 		if (currentRocketId == 1)
 		{
-			transform.Find("Left_Outer").gameObject.SetActive(false);
-			transform.Find("Left").gameObject.SetActive(false);
-			transform.Find("Right").GetComponent<ShopRocket_V2>().setMaterial(loadedRequiredMaterials[currentRocketId + 1 + scrollCounter]);
-			transform.Find("Right_Outer").GetComponent<ShopRocket_V2>()
-				.setMaterial(loadedRequiredMaterials[currentRocketId + 2]);
-		}
-		else if (currentRocketId == 2)
+			transform.Find("Left_Outer").GetComponent<ShopRocket_V2>().receiveProps(rockets.rockets[rockets.rockets.Length-2]);
+			transform.Find("Left").GetComponent<ShopRocket_V2>().receiveProps(rockets.rockets[rockets.rockets.Length-1]);
+			transform.Find("Middle").GetComponent<ShopRocket_V2>().receiveProps(rockets.rockets[currentRocketId-1]);
+			transform.Find("Right").GetComponent<ShopRocket_V2>().receiveProps(rockets.rockets[currentRocketId]);
+			transform.Find("Right_Outer").GetComponent<ShopRocket_V2>().receiveProps(rockets.rockets[currentRocketId+1]);
+
+		}else if (currentRocketId == 2)
 		{
-			transform.Find("Left_Outer").gameObject.SetActive(false);
-			transform.Find("Left").gameObject.SetActive(true);
-			transform.Find("Left").GetComponent<ShopRocket_V2>().setMaterial(loadedRequiredMaterials[currentRocketId - 1 + scrollCounter]);
-			transform.Find("Right").GetComponent<ShopRocket_V2>().setMaterial(loadedRequiredMaterials[currentRocketId + 1 + scrollCounter]);
-			transform.Find("Right_Outer").GetComponent<ShopRocket_V2>()
-				.setMaterial(loadedRequiredMaterials[currentRocketId + 2]);
-
-
+			transform.Find("Left_Outer").GetComponent<ShopRocket_V2>().receiveProps(rockets.rockets[rockets.rockets.Length-1]);
+			transform.Find("Left").GetComponent<ShopRocket_V2>().receiveProps(rockets.rockets[currentRocketId-1]);
+			transform.Find("Middle").GetComponent<ShopRocket_V2>().receiveProps(rockets.rockets[currentRocketId]);
+			transform.Find("Right").GetComponent<ShopRocket_V2>().receiveProps(rockets.rockets[currentRocketId +1]);
+			transform.Find("Right_Outer").GetComponent<ShopRocket_V2>().receiveProps(rockets.rockets[currentRocketId+2]);
 		}
-		else
+		
+		
+
+		/*// Set middle rocket material
+		
+		// If middle rocket id is 1 then set left & left_outer materials to 10 & 9 
+		if (middleRocket == 1)
 		{
-			transform.Find("Left_Outer").gameObject.SetActive(true);
-			transform.Find("Left").gameObject.SetActive(true);
-			transform.Find("Right_Outer").gameObject.SetActive(true);
-			transform.Find("Left_Outer").GetComponent<ShopRocket_V2>().setMaterial(loadedRequiredMaterials[currentRocketId - 2 + scrollCounter]);
-			transform.Find("Left").GetComponent<ShopRocket_V2>().setMaterial(loadedRequiredMaterials[currentRocketId - 1 + scrollCounter]);
-			transform.Find("Right").GetComponent<ShopRocket_V2>().setMaterial(loadedRequiredMaterials[currentRocketId + 1 + scrollCounter]);
-			transform.Find("Right_Outer").GetComponent<ShopRocket_V2>()
-				.setMaterial(loadedRequiredMaterials[currentRocketId + 2 + scrollCounter]);
-
+	
+			transform.Find("Left_Outer").GetComponent<ShopRocket_V2>().setMaterial(loadedRequiredMaterials[loadedRequiredMaterials.Count-1]);
+			transform.Find("Left").GetComponent<ShopRocket_V2>().setMaterial(loadedRequiredMaterials[loadedRequiredMaterials.Count]);
 		}
+		
+		transform.Find("Right").GetComponent<ShopRocket_V2>().setMaterial(loadedRequiredMaterials[middleRocket + 1]);
+		transform.Find("Right_Outer").GetComponent<ShopRocket_V2>().setMaterial(loadedRequiredMaterials[middleRocket + 2]);
+		*/
+
 
 	}
 	

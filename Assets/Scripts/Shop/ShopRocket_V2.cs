@@ -1,6 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
+using UnityEditor;
+
 
 public class ShopRocket_V2 : MonoBehaviour {
 	
@@ -19,7 +23,9 @@ public class ShopRocket_V2 : MonoBehaviour {
 	private Vector3 _currentScale;
 	private Vector3 _sideRocketScale = new Vector3(80f, 80f, 80f);
 	private Vector3 _middleRocketScale = new Vector3(120f, 120f, 120f);
-	
+
+	private int _id,_price;
+	private string _name;
 	
 	private Vector3 _endPosition,_currentPosition;
 	private void Awake()
@@ -42,14 +48,34 @@ public class ShopRocket_V2 : MonoBehaviour {
 		_meshAddons.material.color = materials[0].color;
 	}
 
-	public void setMaterial(List<Material> materials)
+	private void setMaterial(String[] materials)
 	{
-		_meshBody.materials[0].color = materials[0].color;
-		_meshBody.materials[1].color = materials[1].color;
-		_meshAddons.material.color = materials[1].color;
+		
+		string path_1 = "Assets/Resources/Rockets/" + (_id-1) + "/" + materials[0] + ".mat";
+		string path_2 = "Assets/Resources/Rockets/" + (_id-1) + "/" + materials[1] + ".mat";
+
+
+		Material mat1 = AssetDatabase.LoadAssetAtPath<Material>(path_1);
+		Material mat2 = AssetDatabase.LoadAssetAtPath<Material>(path_2);
+
+		_meshBody.materials[0].color = mat1.color;
+		_meshBody.materials[1].color = mat2.color;
+		_meshAddons.material.color = mat2.color;
+	}
+
+	public void receiveProps(Rocket rocket)
+	{
+		print("ID : " + rocket._id);
+		_id = rocket._id;
+		print("Name: " + rocket.name);
+		_name = rocket.name;
+		print("Materials: " + rocket.materials);
+		setMaterial(rocket.materials);
+		print(_name + " price is : " + rocket.price);
+		_price = rocket.price;
 	}
 	
-	/////////////// MOVEMEVT ///////////////
+	/////////////// MOVEMENT ///////////////
 	
 	public void MoveLeft(string rocketName, Vector3 endPosition)
 	{
