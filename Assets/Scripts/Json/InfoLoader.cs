@@ -7,7 +7,7 @@ public class InfoLoader : MonoBehaviour
 {
 
 	public profileInfo profileInfo;
-    public RocketsInfo rocektsInfo;
+    public ShopData rocektsInfo;
     void Awake()
     {
     
@@ -16,7 +16,7 @@ public class InfoLoader : MonoBehaviour
 
 
         profileInfo = JsonUtility.FromJson<profileInfo>(profileInfoFromJson);
-        rocektsInfo = JsonUtility.FromJson<RocketsInfo>(rocketsInfoFromJson);
+        rocektsInfo = JsonUtility.FromJson<ShopData>(rocketsInfoFromJson);
 
         Debug.Log("Profile: " + profileInfoFromJson);
         Debug.Log("Rockets: " + rocketsInfoFromJson);

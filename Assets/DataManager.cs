@@ -24,7 +24,7 @@ public class DataManager : MonoBehaviour {
 	}
 	
 	public profileInfo profileInfo { get; set; }
-	public RocketsInfo rocketsInfo { get; set; }
+	public ShopData shopData { get; set; }
 	
 	void Awake()
 	{
@@ -34,7 +34,7 @@ public class DataManager : MonoBehaviour {
 
 
 		profileInfo = JsonUtility.FromJson<profileInfo>(profileInfoFromJson);
-		rocketsInfo = JsonUtility.FromJson<RocketsInfo>(rocketsInfoFromJson);
+		shopData = JsonUtility.FromJson<ShopData>(rocketsInfoFromJson);
 		_instance = this;
 
 	}

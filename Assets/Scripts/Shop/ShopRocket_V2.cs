@@ -21,11 +21,11 @@ public class ShopRocket_V2 : MonoBehaviour {
 	public float scaleSpeed = 8f;
 	
 	private Vector3 _currentScale;
-	private Vector3 _sideRocketScale = new Vector3(80f, 80f, 80f);
-	private Vector3 _middleRocketScale = new Vector3(120f, 120f, 120f);
+	private readonly Vector3 _sideRocketScale = new Vector3(80f, 80f, 80f);
+	private readonly Vector3 _middleRocketScale = new Vector3(120f, 120f, 120f);
 
-	private int _id,_price;
-	private string _name;
+	public int _id,_price;
+	public string _name, _specialPower;
 	
 	private Vector3 _endPosition,_currentPosition;
 	private void Awake()
@@ -51,8 +51,8 @@ public class ShopRocket_V2 : MonoBehaviour {
 	private void setMaterial(String[] materials)
 	{
 		
-		string path_1 = "Assets/Resources/Rockets/" + (_id-1) + "/" + materials[0] + ".mat";
-		string path_2 = "Assets/Resources/Rockets/" + (_id-1) + "/" + materials[1] + ".mat";
+		string path_1 = "Assets/Resources/Rockets/" + (_id) + "/" + materials[0] + ".mat";
+		string path_2 = "Assets/Resources/Rockets/" + (_id) + "/" + materials[1] + ".mat";
 
 
 		Material mat1 = AssetDatabase.LoadAssetAtPath<Material>(path_1);
@@ -65,14 +65,12 @@ public class ShopRocket_V2 : MonoBehaviour {
 
 	public void receiveProps(Rocket rocket)
 	{
-		print("ID : " + rocket._id);
 		_id = rocket._id;
-		print("Name: " + rocket.name);
 		_name = rocket.name;
-		print("Materials: " + rocket.materials);
 		setMaterial(rocket.materials);
-		print(_name + " price is : " + rocket.price);
 		_price = rocket.price;
+		_specialPower = rocket.specialPower;
+		print("This rocket price is: " + _price + " name is: " + _name + " id is: " +_id);
 	}
 	
 	/////////////// MOVEMENT ///////////////
@@ -169,12 +167,10 @@ public class ShopRocket_V2 : MonoBehaviour {
 	{
 		if (!enlarge)
 		{
-			print("Scale down the rocket: " + gameObject.name);
 			transform.localScale = Vector3.Lerp(_currentScale,_sideRocketScale,Time.deltaTime);
 		}
 		else
 		{
-			print("Scale up the rocket: " + gameObject.name);
 		}
 	}
 }

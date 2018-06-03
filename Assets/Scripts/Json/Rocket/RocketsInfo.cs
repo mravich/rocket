@@ -4,12 +4,12 @@ using UnityEngine;
 
 
 [System.Serializable]
-public class RocketsInfo
+public class ShopData
 {
     public string name;
     public string currentlySelectedItem;
     public Rocket[] rockets;
-
+    
 
 
 }
@@ -23,7 +23,6 @@ public class Rocket
     public string[] materials;
     public bool unlocked;
     public string specialPower;
-
-
-
 }
+
+

@@ -12,8 +12,9 @@ public class Shop_V2 : MonoBehaviour
 
 
 	// PUBLIC OBJECTS USED TO IMPORT COMPONENTS FROM THEM
-	public GameObject profileNameText, profileCoinsText;
+	public GameObject profileNameText, profileCoinsText, currentItem, currentItemSmall;
 
+	public GameObject selectedItemInfo;
 	// PRIVATE COMPONENTS 
 	public GameObject DefaultRocket;
 	public List<GameObject> ShopRockets;
@@ -26,17 +27,18 @@ public class Shop_V2 : MonoBehaviour
 
 	// main profile data 
 	private profileInfo profile;
-	private RocketsInfo rockets;
+	private ShopData rockets;
 
-	private Text profileName, profileCoins;
+	private Text profileName, profileCoins, currentItemName, currentItemSmallName;
 
 	private string currentRocket;
+	public GameObject currentRocketModel;
 
 	private int currentRocketId;
 	// LOAD ALL ROCKETS FROM shop.json and store their properties into something?what
 
 
-	// LOAD ALL MATERIALS FROM resources/rockets/ by the requirement from shopRockets
+	// LOAD ALL MATERIALS FROM resources/rockets/ by the requirement from shopData
 	public Dictionary<int, List<string>> _requiredMaterials;
 
 	public Dictionary<int, List<Material>> loadedRequiredMaterials;
@@ -55,11 +57,12 @@ public class Shop_V2 : MonoBehaviour
 	{
 		// Get profile info from datamanager instance
 		profile = DataManager.Instance.profileInfo;
-		rockets = DataManager.Instance.rocketsInfo;
+		rockets = DataManager.Instance.shopData;
 		// GET ALL COMPONENTS NEEDED
 		profileName = profileNameText.GetComponent<Text>();
 		profileCoins = profileCoinsText.GetComponent<Text>();
-
+		currentItemName = currentItem.GetComponent<Text>();
+		currentItemSmallName = currentItemSmall.GetComponent<Text>();
 		// GETTING THE NAME OF THE CURRENT ROCKET
 		currentRocket = profile.currentRocket;
 
@@ -92,9 +95,14 @@ public class Shop_V2 : MonoBehaviour
 	{
 
 		// Set values of text components
-		profileName.text = profile.name;
+		profileName.text = "Welcome: " + profile.name;
 		profileCoins.text = profile.coins.ToString();
 		
+		// Sort out names of current rocket for the  player and for the shop
+		GameObject defaultRocket = Instantiate(currentRocketModel);
+		defaultRocket.GetComponent<ShopRocket_V2>().receiveProps(rockets.rockets[currentRocketId-1]);
+		currentItemName.text = currentItemSmallName.text = rockets.rockets[currentRocketId-1].name;
+		selectedItemInfo.GetComponent<SelectedItemStats>().setSelectedItemInfo(rockets.rockets[currentRocketId-1]);
 		// Sort shop
 		sortShopRockets(currentRocketId);
 		middleRocket = currentRocketId;
@@ -119,7 +127,8 @@ public class Shop_V2 : MonoBehaviour
 				ScrollShopItems(0);
 				canScroll = false;
 				middleRocket--;
-				print(middleRocket);
+				selectedItemInfo.GetComponent<SelectedItemStats>().setSelectedItemInfo(rockets.rockets[middleRocket]);
+
 
 			}
 			else if (Input.GetKeyDown(KeyCode.RightArrow))
@@ -127,7 +136,7 @@ public class Shop_V2 : MonoBehaviour
 				ScrollShopItems(1);
 				canScroll = false;
 				middleRocket++;
-				print(middleRocket);
+				selectedItemInfo.GetComponent<SelectedItemStats>().setSelectedItemInfo(rockets.rockets[middleRocket]);
 
 			}
 
@@ -220,23 +229,22 @@ public class Shop_V2 : MonoBehaviour
 	void fillStartPostionsDictionary()
 	{
 		_startPositions = new Dictionary<string, Vector3>();
-		_startPositions.Add("Left_Outer", new Vector3(-8f, 0f, 0f));
-		_startPositions.Add("Left", new Vector3(-2.4f, 0f, 0f));
-		_startPositions.Add("Middle", new Vector3(0f, 0f, 0f));
-		_startPositions.Add("Right", new Vector3(2.4f, 0f, 0f));
-		_startPositions.Add("Right_Outer", new Vector3(8f, 0f, 0f));
-
+		_startPositions.Add("Left_Outer", new Vector3(-8f, -0.5f, 0f));
+		_startPositions.Add("Left", new Vector3(-2.4f, -0.5f, 0f));
+		_startPositions.Add("Middle", new Vector3(0f, -0.5f, 0f));
+		_startPositions.Add("Right", new Vector3(2.4f, -0.5f, 0f));
+		_startPositions.Add("Right_Outer", new Vector3(8f, -0.5f, 0f));
 	}
 	
 	// Make list with end positions
 	void fillEndPostionsDictionary()
 	{
 		_endPositions = new Dictionary<string, Vector3>();
-		_endPositions.Add("Left_Outer",new Vector3(-8f,0f,0f));
-		_endPositions.Add("Left",new Vector3(-2.4f,0f,0f));
-		_endPositions.Add("Middle",new Vector3(0f,0f,0f));
-		_endPositions.Add("Right",new Vector3(2.4f,0f,0f));
-		_endPositions.Add("Right_Outer",new Vector3(8f,0f,0f));
+		_endPositions.Add("Left_Outer",new Vector3(-8f,-0.5f,0f));
+		_endPositions.Add("Left",new Vector3(-2.4f,-0.5f,0f));
+		_endPositions.Add("Middle",new Vector3(0f,-0.5f,0f));
+		_endPositions.Add("Right",new Vector3(2.4f,-0.5f,0f));
+		_endPositions.Add("Right_Outer",new Vector3(8f,-0.5f,0f));
 	}
 	// Make list with start rotations
 
@@ -251,6 +259,7 @@ public class Shop_V2 : MonoBehaviour
 	// Give all rockets locked materials
 	void setLockedMaterialForAllRockets()
 	{
+		print("tu sam");
 		foreach (Transform obj in transform)
 		{
 			obj.gameObject.GetComponent<ShopRocket_V2>().setLockedMaterial(_lockedRocketMaterials);
@@ -296,6 +305,11 @@ public class Shop_V2 : MonoBehaviour
 	// TODO replace currentRocketId with another variable which is by default currentRocketId at start then we just increment/decrement it based on scroll directiona
 	void setInitialShopRocketMaterials()
 	{
+		
+		transform.Find("Middle").GetComponent<ShopRocket_V2>().receiveProps(rockets.rockets[currentRocketId-1]);
+
+		
+		/*
 		if (currentRocketId == 1)
 		{
 			transform.Find("Left_Outer").GetComponent<ShopRocket_V2>().receiveProps(rockets.rockets[rockets.rockets.Length-2]);
@@ -308,12 +322,11 @@ public class Shop_V2 : MonoBehaviour
 		{
 			transform.Find("Left_Outer").GetComponent<ShopRocket_V2>().receiveProps(rockets.rockets[rockets.rockets.Length-1]);
 			transform.Find("Left").GetComponent<ShopRocket_V2>().receiveProps(rockets.rockets[currentRocketId-1]);
-			transform.Find("Middle").GetComponent<ShopRocket_V2>().receiveProps(rockets.rockets[currentRocketId]);
+			transform.Find("Middle").GetComponent<ShopRocket_V2>().receiveProps(rockets.rockets[currentRocketId-1]);
 			transform.Find("Right").GetComponent<ShopRocket_V2>().receiveProps(rockets.rockets[currentRocketId +1]);
 			transform.Find("Right_Outer").GetComponent<ShopRocket_V2>().receiveProps(rockets.rockets[currentRocketId+2]);
-		}
-		
-		
+		}*/
+				
 
 		/*// Set middle rocket material
 		
@@ -336,7 +349,6 @@ public class Shop_V2 : MonoBehaviour
 	
 	
 	/////////////ROTATION OF THE SHOP////////////
-	/// 
 	void ScrollShopItems(int direction)
 	{
 		switch (direction)
